@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-// User Name, Mobile, Email, City
+// Creating user Schema for saving User Name, Mobile, Email, City in the database.
 var UserSchema = new  Schema({
     name: {
         type: String,
@@ -27,4 +27,5 @@ var UserSchema = new  Schema({
         type: Date
     }
 });
+
 module.exports = mongoose.model('User', UserSchema);

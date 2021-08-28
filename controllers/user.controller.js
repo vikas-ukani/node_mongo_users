@@ -1,6 +1,7 @@
 "use strict"
 const User = require('../models/user.model');
 
+/** Default cities for dropdown */
 var defaultCities = [
   {
     id: 1,
@@ -20,7 +21,7 @@ var defaultCities = [
   },
 ]
 
-
+// Get all available users 
 exports.getUsers = async (req, res) => {
   const filter = {};
   const users = await User.find(filter);
@@ -30,6 +31,7 @@ exports.getUsers = async (req, res) => {
   });
 };
 
+// User create form
 exports.createUser = async (req, res) => {
   res.render('user/create', {
     title: "Create An User",
@@ -38,7 +40,7 @@ exports.createUser = async (req, res) => {
   });
 };
 
-// Create a user
+// Create a new user
 exports.storeUser = (req, res) => {
   console.log('req.body::', req.body);
   const NewUser = new User(req.body);
@@ -57,10 +59,14 @@ exports.storeUser = (req, res) => {
   });
 };
 
+
+// User Editing
 exports.editUser = (req, res) => {
   const { _id } = req.params
   if (!_id) return res.redirect('/')
 
+
+  // find user by _id
   User.findById(_id, function (err, docs) {
     if (err) return res.redirect('/')
     else {
@@ -75,23 +81,14 @@ exports.editUser = (req, res) => {
   });
 }
 
-// Update a user
-exports.updateUser = (req, res) => {
+// Update a user by _id
+exports.updateUser = async (req, res) => {
   var user = { ...req.body }
 
-  User.updateOne({_id: user._id},
+  User.updateOne({ _id: user._id },
     user,
     function (err, docs) {
-      if (err) {
-        var data = {
-          title: "Update An User",
-          user: user,
-          error: err.message,
-          cities: defaultCities,
-        }
-        res.render('user/edit', data)
-      }
-      else res.redirect('/user/' + req.params.id);
+      res.redirect('/user-edit/' + req.params.id);
     }
   );
 }
