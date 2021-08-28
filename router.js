@@ -3,14 +3,13 @@ const UserController = require('./controllers/user.controller');
 // route groups
 const router = express.Router();
 
-// Create New User Route
+/** Web Routes */
 router.get('/', UserController.getUsers);
-router.post('/user/store', UserController.createUser);
-router.get('/user/create', (req, res) => {
-    res.render('user/create', {
-        title: "Create User",
-        name: req.session.name,
-    });
-});
+router.get('/user-create', UserController.createUser);
+router.post('/user-create', UserController.storeUser);
+router.get('/user-edit/:_id', UserController.editUser);
+router.post('/user-update', UserController.updateUser);
+
+
 
 module.exports = router

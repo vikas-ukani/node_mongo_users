@@ -1,6 +1,26 @@
 "use strict"
 const User = require('../models/user.model');
 
+var defaultCities = [
+  {
+    id: 1,
+    name: "Pune"
+  },
+  {
+    id: 2,
+    name: "Bangloure"
+  },
+  {
+    id: 2,
+    name: "Vapi"
+  },
+  {
+    id: 4,
+    name: "Nadiyad"
+  },
+]
+
+
 exports.getUsers = async (req, res) => {
   const filter = {};
   const users = await User.find(filter);
@@ -8,44 +28,70 @@ exports.getUsers = async (req, res) => {
     title: "Users List",
     users: users
   });
-
-  // var users = [{
-  //   name: "Vikas",
-  //   email: "email@eail",
-  //   mobile: 11315132151,
-  //   city: "Surat",
-  // }]
-  // let users = await User.find();
-  // User.find({}, function (err, users) {
-  //   var userMap = {};
-  //   console.log('users::', users );
-  //   users.forEach(function (user) {
-  //     userMap[user._id] = user;
-  //   });
-  //   console.log('users', users);
-  //   res.render('user/index', {
-  //     title: "Users List",
-  //     users: userMap
-  //   });
-  // });
-
 };
 
-// create a new Blog Post
-exports.createUser = (req, res) => {
+exports.createUser = async (req, res) => {
+  res.render('user/create', {
+    title: "Create An User",
+    error: '',
+    cities: defaultCities
+  });
+};
+
+// Create a user
+exports.storeUser = (req, res) => {
+  console.log('req.body::', req.body);
   const NewUser = new User(req.body);
   NewUser.save((err, User) => {
     if (err) {
-      return res.status(422).json({
-        msg: 'Server encountered an error while creating an user.',
-        error: err
-      });
+      var data = {
+        title: "Create An User",
+        cities: defaultCities,
+        error: err.message
+      }
+      res.render('user/create', data)
     }
     else {
-      return res.status(200).json({
-        msg: 'Successfully user created.',
-        User: User
-      });
+      res.redirect('/')
     }
   });
 };
+
+exports.editUser = (req, res) => {
+  const { _id } = req.params
+  if (!_id) return res.redirect('/')
+
+  User.findById(_id, function (err, docs) {
+    if (err) return res.redirect('/')
+    else {
+      var data = {
+        title: "Update An User",
+        user: docs,
+        error: '',
+        cities: defaultCities,
+      }
+      res.render('user/edit', data)
+    }
+  });
+}
+
+// Update a user
+exports.updateUser = (req, res) => {
+  var user = { ...req.body }
+
+  User.updateOne({_id: user._id},
+    user,
+    function (err, docs) {
+      if (err) {
+        var data = {
+          title: "Update An User",
+          user: user,
+          error: err.message,
+          cities: defaultCities,
+        }
+        res.render('user/edit', data)
+      }
+      else res.redirect('/user/' + req.params.id);
+    }
+  );
+}

@@ -18,35 +18,40 @@
                 <%= error %>
             </p>
             <% } %>
-                <form action="/user-create" method="POST" name="form">
+                <form action="/user-update" method="POST" name="form">
+                    <input type="hidden" name="_id" value="<%= user._id %>">
+
                     <div class="form-group">
                         <label for="exampleInputName">Name</label>
                         <input type="text" name="name" class="form-control" id="name" placeholder="Enter name"
-                            value="">
+                            value="<%= user.name %>">
                     </div>
                     <div class="form-group">
                         <label for="exampleInputEmail1">Email</label>
                         <input type="email" name="email" class="form-control" id="email" placeholder="Enter email"
-                            value="">
+                            value="<%= user.email %>">
                     </div>
                     <div class="form-group">
                         <label for="exampleInputMobile">Mobile</label>
                         <input type="number" name="mobile" class="form-control" id="mobile" placeholder="Enter mobile"
-                            value="">
+                            value="<%= user.mobile %>">
                     </div>
                     <div class="form-group">
                         <label for="exampleInputMobile">Mobile</label>
                         <select name="city" id="city" class="form-control">
                             <option value=""> Select any city.</option>
                             <% cities.forEach((city)=> { %>
-                                <option value='<%=city.name%>'>
-                                    <%=city.name%>
+                                <option value='<%=city.name%>' <%if(user.city==city.name){ %>
+                                    selected
+                                    <% } %>
+                                        >
+                                        <%=city.name%>
                                 </option>
 
                                 <% }); %>
                         </select>
                     </div>
-                    <input type="submit" class="btn btn-primary" value="Create">
+                    <input type="submit" class="btn btn-primary" value="Update">
                     <a href="/" class="btn btn-success ml-2">Back to view </a>
                 </form>
     </div>

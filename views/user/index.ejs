@@ -15,11 +15,14 @@
     <div class="mt-5">
 
         <div class="card">
-            <div class="card-header">
-                Availabe Users
+            <div class="card-header row m-0">
+                <span class="col-10">Availabe Users</span>
+                <span class="col-2">
+                    <a href="/user-create">Create an User</a>
+                </span>
             </div>
             <div class="card-body p-0">
-                <table class="table table-hover">
+                <table class="table table-hover ">
                     <tr class="">
                         <th>Name</th>
                         <th>Email</th>
@@ -42,7 +45,7 @@
                                 <%= user.city %>
                             </td>
                             <td>
-                                <a href="/user/edit">EDIT</a>
+                                <a href="/user-edit/<%=user._id%>">EDIT</a>
                             </td>
                         </tr>
 
